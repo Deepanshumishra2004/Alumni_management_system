@@ -1,4 +1,4 @@
-// Login.tsx
+// src/pages/Login.tsx
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../services/studentService';
@@ -6,10 +6,8 @@ import { AuthContext } from '../context/AuthContext';
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
+  const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  const context = useContext(AuthContext);
-  if (!context) throw new Error('AuthContext must be used within AuthProvider');
-  const { login } = context;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -19,7 +17,9 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await API.post('/admins/login', form);
-      login(res.data.admin, res.data.token);
+      localStorage.setItem('token', res.data.token);
+      setUser(res.data.admin);
+      navigate('/dashboard');
     } catch {
       alert('Login failed');
     }
@@ -27,8 +27,8 @@ const Login = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input name="email" onChange={handleChange} placeholder="Email" required />
-      <input name="password" type="password" onChange={handleChange} placeholder="Password" required />
+      <input name="email" placeholder="Email" onChange={handleChange} required />
+      <input name="password" type="password" placeholder="Password" onChange={handleChange} required />
       <button type="submit">Login</button>
     </form>
   );

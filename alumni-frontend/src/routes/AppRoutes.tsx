@@ -23,6 +23,9 @@ const AppRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        
+        <Route path="/students/:id" element={<PrivateRoute><AddEditStudent /></PrivateRoute>} />
+        <Route path="/students/add" element={<PrivateRoute><AddEditStudent /></PrivateRoute>} />
 
         <Route
           path="/add-student"
