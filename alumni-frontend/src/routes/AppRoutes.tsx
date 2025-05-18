@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import PrivateRoute from '../utils/PrivateRoute';
 
 import Home from '../pages/Home';
 import Login from '../pages/Login';
@@ -21,10 +22,8 @@ const AppRoutes = () => {
         <Route path="/alumni" element={<Alumni />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route
-          path="/dashboard"
-          element={user ? <Dashboard /> : <Navigate to="/login" />}
-        />
+        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+
         <Route
           path="/add-student"
           element={user ? <AddEditStudent /> : <Navigate to="/login" />}
