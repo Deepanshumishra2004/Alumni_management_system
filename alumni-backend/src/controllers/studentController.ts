@@ -52,8 +52,7 @@ export const createStudent = async (req: AuthRequest, res: Response) => {
       console.error('Add student error:', err);
       res.status(500).json({ message: 'Server error' });
     }
-  };
-  
+  }; 
 
   export const updateStudent = async (req: AuthRequest, res: Response) => {
     try {
@@ -75,7 +74,6 @@ export const createStudent = async (req: AuthRequest, res: Response) => {
       res.status(500).json({ message: 'Server error' });
     }
   };
-  
 
   export const deleteStudent = async (req: AuthRequest, res: Response) => {
     try {
@@ -94,5 +92,3 @@ export const createStudent = async (req: AuthRequest, res: Response) => {
       res.status(500).json({ message: 'Server error' });
     }
   };
-  
-  
