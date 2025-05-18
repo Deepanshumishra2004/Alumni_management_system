@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IStudent extends Document {
   name: string;
@@ -10,14 +10,14 @@ export interface IStudent extends Document {
   adminId: mongoose.Types.ObjectId;
 }
 
-const studentSchema = new Schema<IStudent>({
+const StudentSchema: Schema = new Schema({
   name: { type: String, required: true },
   branch: { type: String, required: true },
   contact: { type: String, required: true },
   batch: { type: String, required: true },
   currentLocation: { type: String },
   currentWork: { type: String },
-  adminId: { type: Schema.Types.ObjectId, ref: 'Admin', required: true },
-}, { timestamps: true });
+  adminId: { type: Schema.Types.ObjectId, ref: 'Admin', required: true }
+});
 
-export default mongoose.model<IStudent>('Student', studentSchema);
+export default mongoose.model<IStudent>('Student', StudentSchema);

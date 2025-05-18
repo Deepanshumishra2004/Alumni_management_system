@@ -30,48 +30,70 @@ export const getStudentById = async (req: Request, res: Response) => {
 };
 
 export const createStudent = async (req: AuthRequest, res: Response) => {
-  try {
-    const { name, branch, contact, batch } = req.body;
-    if (!name || !branch || !contact || !batch) {
-      return res.status(400).json({ message: 'Missing required fields' });
+    try {
+      const { name, branch, contact, batch, currentLocation, currentWork } = req.body;
+      if (!name || !branch || !contact || !batch) {
+        return res.status(400).json({ message: 'Missing required fields' });
+      }
+  
+      const student = new Student({
+        name,
+        branch,
+        contact,
+        batch,
+        currentLocation,
+        currentWork,
+        adminId: req.admin!._id,
+      });
+  
+      await student.save();
+      res.status(201).json(student);
+    } catch (err) {
+      console.error('Add student error:', err);
+      res.status(500).json({ message: 'Server error' });
     }
-    const student = new Student({ ...req.body, adminId: req.admin!._id });
-    await student.save();
-    res.status(201).json(student);
-  } catch (err) {
-    console.error('Add student error:', err);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
+  };
+  
 
-export const updateStudent = async (req: AuthRequest, res: Response) => {
-  try {
-    const student = await Student.findById(req.params.id);
-    if (!student) return res.status(404).json({ message: 'Student not found' });
-
-    const isOwner = student.adminId.toString() === req.admin!._id.toString();
-    const isSuperAdmin = req.admin!.role === 'superAdmin';
-
-    if (!isOwner && !isSuperAdmin) {
-      return res.status(403).json({ message: 'Not authorized to update this student' });
+  export const updateStudent = async (req: AuthRequest, res: Response) => {
+    try {
+      const student = await Student.findById(req.params.id);
+      if (!student) return res.status(404).json({ message: 'Student not found' });
+  
+      const isOwner = student.adminId.toString() === req.admin!._id.toString();
+      const isAdminOrSuperAdmin = ['admin', 'superAdmin'].includes(req.admin!.role);
+  
+      if (!isOwner && !isAdminOrSuperAdmin) {
+        return res.status(403).json({ message: 'Not authorized to update this student' });
+      }
+  
+      Object.assign(student, req.body);
+      await student.save();
+      res.json(student);
+    } catch (err) {
+      console.error('Update student error:', err);
+      res.status(500).json({ message: 'Server error' });
     }
-
-    Object.assign(student, req.body);
-    await student.save();
-    res.json(student);
-  } catch (err) {
-    console.error('Update student error:', err);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
+  };
+  
 
 export const deleteStudent = async (req: AuthRequest, res: Response) => {
-  try {
-    const student = await Student.findByIdAndDelete(req.params.id);
-    if (!student) return res.status(404).json({ message: 'Student not found' });
-    res.json({ message: 'Student deleted' });
-  } catch (err) {
-    console.error('Delete student error:', err);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
+    try {
+      const student = await Student.findById(req.params.id);
+      if (!student) return res.status(404).json({ message: 'Student not found' });
+  
+      const isOwner = student.adminId.toString() === req.admin!._id;
+      const isSuperAdmin = req.admin!.role === 'superAdmin';
+  
+      if (!isOwner && !isSuperAdmin) {
+        return res.status(403).json({ message: 'Not authorized to delete this student' });
+      }
+  
+      await Student.findByIdAndDelete(req.params.id);
+      res.json({ message: 'Student deleted' });
+    } catch (err) {
+      console.error('Delete student error:', err);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+  
