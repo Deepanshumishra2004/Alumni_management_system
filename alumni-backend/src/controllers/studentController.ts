@@ -61,9 +61,9 @@ export const createStudent = async (req: AuthRequest, res: Response) => {
       if (!student) return res.status(404).json({ message: 'Student not found' });
   
       const isOwner = student.adminId.toString() === req.admin!._id.toString();
-      const isAdminOrSuperAdmin = ['admin', 'superAdmin'].includes(req.admin!.role);
-  
-      if (!isOwner && !isAdminOrSuperAdmin) {
+      const isSuperAdmin = req.admin!.role === 'superAdmin';
+
+      if (!isOwner && !isSuperAdmin) {
         return res.status(403).json({ message: 'Not authorized to update this student' });
       }
   
@@ -77,23 +77,22 @@ export const createStudent = async (req: AuthRequest, res: Response) => {
   };
   
 
-export const deleteStudent = async (req: AuthRequest, res: Response) => {
+  export const deleteStudent = async (req: AuthRequest, res: Response) => {
     try {
       const student = await Student.findById(req.params.id);
       if (!student) return res.status(404).json({ message: 'Student not found' });
   
-      const isOwner = student.adminId.toString() === req.admin!._id;
       const isSuperAdmin = req.admin!.role === 'superAdmin';
-  
-      if (!isOwner && !isSuperAdmin) {
-        return res.status(403).json({ message: 'Not authorized to delete this student' });
+      if (!isSuperAdmin) {
+        return res.status(403).json({ message: 'Only superAdmin can delete students' });
       }
   
-      await Student.findByIdAndDelete(req.params.id);
+      await student.deleteOne();
       res.json({ message: 'Student deleted' });
     } catch (err) {
       console.error('Delete student error:', err);
       res.status(500).json({ message: 'Server error' });
     }
   };
+  
   
