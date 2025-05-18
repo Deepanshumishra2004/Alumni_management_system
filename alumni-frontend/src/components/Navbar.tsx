@@ -1,15 +1,28 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
-export default function Navbar() {
+
+
+const Navbar = () => {
+  const { user, logout } = useAuth();
+
   return (
-    <nav className="bg-white shadow p-4 flex justify-between items-center">
-      <div className="text-xl font-bold">Alumni System</div>
-      <div className="space-x-4">
-        <Link to="/" className="hover:text-blue-500">About</Link>
-        <Link to="/alumni" className="hover:text-blue-500">Alumni</Link>
-        <Link to="/login" className="hover:text-blue-500">Login</Link>
-        <Link to="/signup" className="hover:text-blue-500">Signup</Link>
-      </div>
+    <nav>
+      <Link to="/">About</Link>
+      <Link to="/alumni">Alumni</Link>
+      {user ? (
+        <>
+          <Link to="/dashboard">Dashboard</Link>
+          <button onClick={logout}>Logout</button>
+        </>
+      ) : (
+        <>
+          <Link to="/login">Login</Link>
+          <Link to="/signup">Signup</Link>
+        </>
+      )}
     </nav>
   );
-}
+};
+
+export default Navbar;

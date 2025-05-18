@@ -1,12 +1,12 @@
-// src/pages/Login.tsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from '../utils/authUtils';
+import { useState, useContext } from 'react';
+import API from '../services/studentService';
+import { AuthContext } from '../context/AuthContext';
 
-const Login: React.FC = () => {
-  const navigate = useNavigate();
+const Login = () => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error('AuthContext must be used within AuthProvider');
+  const { login } = context;
   const [form, setForm] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -15,45 +15,19 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/admins/signin', form);
-      localStorage.setItem('token', res.data.token);
-      navigate('/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed');
+      const res = await API.post('/admins/signin', form);
+      login(res.data.admin, res.data.token);
+    } catch (err) {
+      alert('Login failed');
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-xl shadow-md">
-      <h2 className="text-2xl font-semibold mb-4 text-center">Admin Login</h2>
-      {error && <p className="text-red-500 mb-4 text-sm text-center">{error}</p>}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-          className="w-full p-2 border rounded"
-        />
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-        >
-          Login
-        </button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <input name="email" placeholder="Email" onChange={handleChange} required />
+      <input name="password" placeholder="Password" type="password" onChange={handleChange} required />
+      <button type="submit">Login</button>
+    </form>
   );
 };
 
