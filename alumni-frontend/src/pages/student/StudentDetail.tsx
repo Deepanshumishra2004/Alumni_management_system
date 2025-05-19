@@ -30,20 +30,44 @@ const StudentDetail = () => {
     if (id) fetchStudent();
   }, [id, navigate]);
 
-  if (!student) return <div>Loading...</div>;
+  if (!student)
+    return (
+      <div className="flex justify-center items-center h-64 text-gray-500 text-lg">
+        Loading student information...
+      </div>
+    );
 
   return (
-    <div className="max-w-md mx-auto p-4 border rounded mt-6">
-      <h1 className="text-2xl mb-4">{student.name}</h1>
-      <p><strong>Branch:</strong> {student.branch}</p>
-      <p><strong>Batch:</strong> {student.batch}</p>
-      <p><strong>Contact:</strong> {student.contact}</p>
-      <p><strong>Current Location:</strong> {student.currentLocation || "N/A"}</p>
-      <p><strong>Current Work:</strong> {student.currentWork || "N/A"}</p>
+    <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-8 mt-8 border border-gray-200">
+      <h1 className="text-3xl font-semibold text-gray-900 mb-6">{student.name}</h1>
+
+      <div className="space-y-4 text-gray-700">
+        <div>
+          <span className="font-medium text-gray-800">Branch: </span>
+          {student.branch}
+        </div>
+        <div>
+          <span className="font-medium text-gray-800">Batch: </span>
+          {student.batch}
+        </div>
+        <div>
+          <span className="font-medium text-gray-800">Contact: </span>
+          {student.contact}
+        </div>
+        <div>
+          <span className="font-medium text-gray-800">Current Location: </span>
+          {student.currentLocation || "N/A"}
+        </div>
+        <div>
+          <span className="font-medium text-gray-800">Current Work: </span>
+          {student.currentWork || "N/A"}
+        </div>
+      </div>
 
       <button
         onClick={() => navigate("/student-dashboard")}
-        className="mt-4 bg-gray-500 text-white px-4 py-2 rounded"
+        className="mt-8 w-full bg-blue-600 hover:bg-blue-700 transition-colors text-white font-semibold py-3 rounded-lg shadow-md"
+        aria-label="Back to Dashboard"
       >
         Back to Dashboard
       </button>

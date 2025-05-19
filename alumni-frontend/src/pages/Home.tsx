@@ -14,6 +14,13 @@ const HomePage: FC = () => {
           AlumniConnect
         </h1>
         <div className="space-x-6 text-gray-700 font-semibold">
+        <Link
+            to="/student-dashboard"
+            className="hover:text-blue-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded"
+            aria-label="Go to Login page"
+          >
+            All Student
+          </Link>
           <Link
             to="/login"
             className="hover:text-blue-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded"

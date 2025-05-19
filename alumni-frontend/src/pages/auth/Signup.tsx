@@ -11,7 +11,7 @@ const Signup = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/admin/signup", {
+      const res = await axios.post("http://localhost:5000/api/admins/signup", {
         name,
         email,
         password,
@@ -19,7 +19,7 @@ const Signup = () => {
 
       localStorage.setItem("token", res.data.token);
       if (res.data.role === "admin") {
-        navigate("/admin/dashboard");
+        navigate("/student-dashboard");
       }
     } catch (err) {
       alert("Signup failed");

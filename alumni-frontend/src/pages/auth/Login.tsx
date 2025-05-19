@@ -10,19 +10,21 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/admin/login", {
+      const res = await axios.post("http://localhost:5000/api/admins/login", {
         email,
         password,
       });
-
+  
       localStorage.setItem("token", res.data.token);
+      console.log(res.data.role);
       if (res.data.role === "admin") {
-        navigate("/admin/dashboard");
+        navigate("/student-dashboard");
       }
     } catch (err) {
       alert("Invalid credentials");
     }
   };
+  
 
   return (
     <form onSubmit={handleLogin}>
