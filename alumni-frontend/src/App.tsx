@@ -1,16 +1,15 @@
-import { AuthProvider } from './context/AuthContext';
-import AppRoutes from './routes/AppRoutes';
-import Navbar from './components/Navbar';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import PrivateRoutes from "./routes/PrivateRoutes";
+import Home from "./pages/Home";
 
-function App() {
+const App = () => {
   return (
-    <AuthProvider>
-      <div className="min-h-screen bg-gray-100">
-        <Navbar />
-        <AppRoutes />
-      </div>
-    </AuthProvider>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/*" element={<PrivateRoutes />} />
+    </Routes>
   );
-}
+};
 
 export default App;

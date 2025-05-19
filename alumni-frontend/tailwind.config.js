@@ -1,15 +1,11 @@
-/** @type {import('tailwindcss').Config} */
-export default {
+// tailwind.config.js
+module.exports = {
     content: [
-        "./index.html",
-        "./src/**/*.{js,ts,jsx,tsx}",
+      "./src/**/*.{js,ts,jsx,tsx}", // This must include all your folders
     ],
     theme: {
-        extend: {
-            animation: {
-                'spin-slow': 'spin 3s linear infinite',
-            },
-        },
+      extend: {},
     },
     plugins: [],
-} 
+  }
+  
